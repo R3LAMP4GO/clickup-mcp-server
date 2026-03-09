@@ -21,11 +21,10 @@ interface ServerConfig {
 
 interface Config {
   server: ServerConfig;
-  // Remove clickUp property holding OAuth config
-  // clickUp: ClickUpConfig;
-  clickUpPersonalToken: string; // Add property for Personal API Token
-  clickUpApiUrl: string; // Keep API URL separate
-  encryptionKey: string; // Keep encryption key for potentially encrypting token at rest
+  clickUpPersonalToken: string;
+  clickUpApiUrl: string;
+  encryptionKey: string;
+  dataDir: string;
 }
 
 // Removed unused generateEncryptionKey - handled within validateConfig now if needed
@@ -62,22 +61,17 @@ function validateConfig(): Config {
   const encryptionKey =
     process.env.ENCRYPTION_KEY || crypto.randomBytes(32).toString("hex");
 
+  const dataDir = process.env.DATA_DIR || path.join(process.cwd(), "data");
+
   return {
     server: {
       port,
       logLevel,
     },
-    // Remove clickUp object
-    // clickUp: {
-    //   clientId: process.env.CLICKUP_CLIENT_ID!,
-    //   clientSecret: process.env.CLICKUP_CLIENT_SECRET!,
-    //   redirectUri,
-    //   apiUrl: "https://api.clickup.com/api/v2",
-    //   authUrl: "https://app.clickup.com/api",
-    // },
-    clickUpPersonalToken, // Add token directly
-    clickUpApiUrl: "https://api.clickup.com/api", // Base URL with /api path
-    encryptionKey, // Keep encryption key
+    clickUpPersonalToken,
+    clickUpApiUrl: "https://api.clickup.com/api",
+    encryptionKey,
+    dataDir,
   };
 }
 

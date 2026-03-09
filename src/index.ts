@@ -1,15 +1,26 @@
 #!/usr/bin/env node
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import {
   CallToolRequest,
   CallToolRequestSchema,
   ListToolsRequestSchema,
   Tool,
 } from "@modelcontextprotocol/sdk/types.js";
+import type { IncomingMessage, ServerResponse } from "node:http";
+import express from "express";
 import { ClickUpService } from "./services/clickup.service.js";
 import { config } from "./config/app.config.js";
 import { logger } from "./logger.js";
+import {
+  bearerAuthMiddleware,
+  ensureAdminToken,
+  generateToken,
+  listTokens,
+  revokeToken,
+} from "./middleware/auth.js";
+
+// ClickUp type imports
 import {
   ClickUpTask,
   ClickUpBoard,
@@ -31,12 +42,11 @@ import {
   CreateDocPageParams,
   GetDocPageContentParams,
   EditDocPageContentParams,
-  // View Types (import only needed types here)
-  // ClickUpView, GetViewsParams, ClickUpViewParentType, CreateViewParams, ...
   ClickUpViewParentType,
   ClickUpViewType,
 } from "./types.js";
-// Import tool definitions and handlers
+
+// Tool definitions + handlers
 import {
   createTaskTool,
   updateTaskTool,
@@ -103,7 +113,6 @@ import {
   handleDeleteView,
   handleGetViewTasks,
 } from "./tools/view.tools.js";
-// Import NEW tools/handlers
 import { getTeamsTool, handleGetTeams } from "./tools/team.tools.js";
 import {
   getListsTool,
@@ -113,24 +122,57 @@ import {
 } from "./tools/list.tools.js";
 import { createBoardTool, handleCreateBoard } from "./tools/board.tools.js";
 
-// Tool Schemas - REMOVE taskSchema definition if only used in task.tools.ts
-const commonIdDescription =
-  "The unique identifier for the resource in ClickUp.";
-const teamIdDescription = "The ID of the Workspace (Team) to operate on.";
-const spaceIdDescription = "The ID of the Space to operate on.";
-const folderIdDescription = "The ID of the Folder to operate on.";
-const archivedDescription =
-  "Whether to include archived items (true or false).";
+// --- Token management MCP tools ---
+const generateApiTokenTool: Tool = {
+  name: "generate_api_token",
+  description:
+    "Generate a new API bearer token for a teammate to access this MCP server.",
+  inputSchema: {
+    type: "object" as const,
+    properties: {
+      user_name: {
+        type: "string",
+        description: "Name of the user this token is for",
+      },
+    },
+    required: ["user_name"],
+  },
+};
 
-// Tool Definitions - REMOVE createTaskTool and updateTaskTool
-// const createTaskTool: Tool = { ... };
-// const updateTaskTool: Tool = { ... };
+const listApiTokensTool: Tool = {
+  name: "list_api_tokens",
+  description:
+    "List all API tokens with user names and last-used timestamps.",
+  inputSchema: {
+    type: "object" as const,
+    properties: {},
+  },
+};
 
-// Keep main function structure
+const revokeApiTokenTool: Tool = {
+  name: "revoke_api_token",
+  description: "Revoke an API token.",
+  inputSchema: {
+    type: "object" as const,
+    properties: {
+      token: {
+        type: "string",
+        description: "The token to revoke",
+      },
+    },
+    required: ["token"],
+  },
+};
+
 async function main() {
   try {
-    logger.info("Starting ClickUp MCP Server...");
+    logger.info("Starting ClickUp MCP Server (SSE mode)...");
+
+    // Ensure at least one admin token exists
+    ensureAdminToken();
+
     const clickUpService = new ClickUpService();
+
     const serverOptions = {
       capabilities: {
         tools: {
@@ -165,23 +207,20 @@ async function main() {
           deleteViewTool,
           getViewTasksTool,
           createListTool,
+          generateApiTokenTool,
+          listApiTokensTool,
+          revokeApiTokenTool,
         },
       },
     };
+
     const server = new Server(
-      {
-        name: "ClickUp MCP Server",
-        version: "1.0.0",
-      },
+      { name: "ClickUp MCP Server", version: "1.1.5" },
       serverOptions,
     );
 
-    // Handle ListTools request
+    // Handle ListTools
     server.setRequestHandler(ListToolsRequestSchema, async () => {
-      // The 'tools' object within serverOptions.capabilities.tools
-      // is an object where keys are the shorthand property names (e.g., "createTaskTool")
-      // and values are the actual Tool definition objects.
-      // Object.values() will give an array of these Tool definition objects.
       const toolDefinitions: Tool[] = Object.values(
         serverOptions.capabilities.tools,
       );
@@ -196,7 +235,6 @@ async function main() {
         try {
           const args = request.params.arguments ?? {};
           switch (request.params.name) {
-            // ... (cases for tasks, spaces, folders, custom fields, docs, views) ...
             case createTaskTool.name:
               return await handleCreateTask(clickUpService, args);
             case updateTaskTool.name:
@@ -254,8 +292,6 @@ async function main() {
               return await handleDeleteView(clickUpService, args);
             case getViewTasksTool.name:
               return await handleGetViewTasks(clickUpService, args);
-
-            // --- Refactored Cases ---
             case getTeamsTool.name:
               return await handleGetTeams(clickUpService, args);
             case getListsTool.name:
@@ -264,6 +300,43 @@ async function main() {
               return await handleCreateBoard(clickUpService, args);
             case createListTool.name:
               return await handleCreateList(clickUpService, args);
+
+            // Token management tools
+            case generateApiTokenTool.name: {
+              const userName = args.user_name as string;
+              const token = generateToken(userName);
+              return {
+                content: [
+                  {
+                    type: "text",
+                    text: `Token generated for ${userName}: ${token}`,
+                  },
+                ],
+              };
+            }
+            case listApiTokensTool.name: {
+              const tokens = listTokens();
+              const masked = tokens.map((t) => ({
+                ...t,
+                token: t.token.slice(0, 8) + "..." + t.token.slice(-4),
+              }));
+              return {
+                content: [
+                  { type: "text", text: JSON.stringify(masked, null, 2) },
+                ],
+              };
+            }
+            case revokeApiTokenTool.name: {
+              const success = revokeToken(args.token as string);
+              return {
+                content: [
+                  {
+                    type: "text",
+                    text: success ? "Token revoked." : "Token not found.",
+                  },
+                ],
+              };
+            }
 
             default:
               throw new Error(`Unknown tool: ${request.params.name}`);
@@ -281,15 +354,64 @@ async function main() {
       },
     );
 
-    // Explicitly create and connect the Stdio transport
-    const transport = new StdioServerTransport();
-    server.connect(transport);
-    logger.info(
-      "ClickUp MCP Server started successfully and listening via Stdio.",
-    );
+    // --- Express app for SSE transport ---
+    const app = express();
+
+    // Track active SSE transports by sessionId
+    const transports = new Map<string, SSEServerTransport>();
+
+    // Health check (no auth)
+    app.get("/health", (_req, res) => {
+      res.json({ status: "ok", transport: "sse", version: "1.1.5" });
+    });
+
+    // SSE endpoint — auth required
+    app.get("/sse", bearerAuthMiddleware, async (req, res) => {
+      logger.info("New SSE connection");
+      const transport = new SSEServerTransport(
+        "/messages",
+        res as unknown as ServerResponse,
+      );
+      transports.set(transport.sessionId, transport);
+
+      transport.onclose = () => {
+        transports.delete(transport.sessionId);
+        logger.info("SSE connection closed, session:", transport.sessionId);
+      };
+
+      await server.connect(transport);
+    });
+
+    // Message endpoint — auth required
+    app.post("/messages", bearerAuthMiddleware, async (req, res) => {
+      const sessionId = req.query.sessionId as string;
+      const transport = transports.get(sessionId);
+      if (!transport) {
+        res.status(400).json({ error: "Unknown session" });
+        return;
+      }
+      await transport.handlePostMessage(
+        req as unknown as IncomingMessage,
+        res as unknown as ServerResponse,
+      );
+    });
+
+    const port = config.server.port;
+    const httpServer = app.listen(port, () => {
+      logger.info(`MCP SSE server listening on http://0.0.0.0:${port}`);
+      logger.info(`  SSE endpoint: GET /sse`);
+      logger.info(`  Messages:     POST /messages`);
+      logger.info(`  Health:       GET /health`);
+    });
+    httpServer.on("listening", () => {
+      const addr = httpServer.address();
+      if (addr && typeof addr === "object") {
+        logger.info(`Bound to ${addr.address}:${addr.port}`);
+      }
+    });
   } catch (error) {
     logger.error("Failed to start ClickUp MCP Server:", error);
-    process.exit(1); // Exit with error code
+    process.exit(1);
   }
 }
 

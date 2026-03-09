@@ -43,6 +43,9 @@ Thumbs.db
 # Generated files
 public/oauth-success.html
 
+# SQLite data (Docker volume)
+data/
+
 # Additional debug logs
 lerna-debug.log*
 .pnpm-debug.log*
