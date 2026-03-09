@@ -600,3 +600,62 @@ export interface GetViewTasksParams {
   view_id: string;
   page?: number; // For pagination
 }
+
+// +++ Comment Types +++
+export interface ClickUpComment {
+  id: string;
+  comment_text: string;
+  user: {
+    id: number;
+    username: string;
+    email: string;
+    color: string;
+    profilePicture?: string;
+  };
+  resolved: boolean;
+  assignee?: {
+    id: number;
+    username: string;
+    email: string;
+    color: string;
+    profilePicture?: string;
+  };
+  assigned_by?: {
+    id: number;
+    username: string;
+    email: string;
+    color: string;
+    profilePicture?: string;
+  };
+  date: string;
+}
+
+export interface GetTaskCommentsParams {
+  task_id: string;
+  start?: number;
+  start_id?: string;
+}
+
+export interface CreateTaskCommentParams {
+  task_id: string;
+  comment_text: string;
+  assignee?: number;
+  notify_all?: boolean;
+}
+
+export interface GetListCommentsParams {
+  list_id: string;
+  start?: number;
+  start_id?: string;
+}
+
+export interface UpdateCommentParams {
+  comment_id: string;
+  comment_text: string;
+  assignee?: number;
+  resolved?: boolean;
+}
+
+export interface DeleteCommentParams {
+  comment_id: string;
+}

@@ -112,6 +112,18 @@ import {
   handleCreateList,
 } from "./tools/list.tools.js";
 import { createBoardTool, handleCreateBoard } from "./tools/board.tools.js";
+import {
+  getTaskCommentsTool,
+  createTaskCommentTool,
+  getListCommentsTool,
+  updateCommentTool,
+  deleteCommentTool,
+  handleGetTaskComments,
+  handleCreateTaskComment,
+  handleGetListComments,
+  handleUpdateComment,
+  handleDeleteComment,
+} from "./tools/comment.tools.js";
 
 // Tool Schemas - REMOVE taskSchema definition if only used in task.tools.ts
 const commonIdDescription =
@@ -165,6 +177,11 @@ async function main() {
           deleteViewTool,
           getViewTasksTool,
           createListTool,
+          getTaskCommentsTool,
+          createTaskCommentTool,
+          getListCommentsTool,
+          updateCommentTool,
+          deleteCommentTool,
         },
       },
     };
@@ -264,6 +281,16 @@ async function main() {
               return await handleCreateBoard(clickUpService, args);
             case createListTool.name:
               return await handleCreateList(clickUpService, args);
+            case getTaskCommentsTool.name:
+              return await handleGetTaskComments(clickUpService, args);
+            case createTaskCommentTool.name:
+              return await handleCreateTaskComment(clickUpService, args);
+            case getListCommentsTool.name:
+              return await handleGetListComments(clickUpService, args);
+            case updateCommentTool.name:
+              return await handleUpdateComment(clickUpService, args);
+            case deleteCommentTool.name:
+              return await handleDeleteComment(clickUpService, args);
 
             default:
               throw new Error(`Unknown tool: ${request.params.name}`);
