@@ -190,6 +190,7 @@ import {
   emailSendEmailTool,
   handleSendEmail,
 } from "./tools/email.tools.js";
+import { startEngine } from "./engine/index.js";
 
 // Tool Schemas - REMOVE taskSchema definition if only used in task.tools.ts
 const commonIdDescription =
@@ -209,6 +210,7 @@ async function main() {
   try {
     logger.info("Starting ClickUp MCP Server...");
     const clickUpService = new ClickUpService();
+    startEngine();
     const serverOptions = {
       capabilities: {
         tools: {

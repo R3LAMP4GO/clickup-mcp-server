@@ -38,6 +38,13 @@ interface Config {
   discordWebhookUrl?: string;
   githubToken?: string;
   smtp?: SmtpConfig;
+  engine?: EngineConfig;
+}
+
+interface EngineConfig {
+  dbPath: string;
+  webhookPort: number;
+  webhookSecret: string;
 }
 
 // Removed unused generateEncryptionKey - handled within validateConfig now if needed
@@ -103,6 +110,15 @@ function validateConfig(): Config {
     discordWebhookUrl: process.env.DISCORD_WEBHOOK_URL,
     githubToken: process.env.GITHUB_TOKEN,
     smtp,
+    engine: process.env.ENGINE_DB_PATH
+      ? {
+          dbPath: process.env.ENGINE_DB_PATH,
+          webhookPort: process.env.ENGINE_WEBHOOK_PORT
+            ? parseInt(process.env.ENGINE_WEBHOOK_PORT)
+            : 3456,
+          webhookSecret: process.env.ENGINE_WEBHOOK_SECRET ?? "",
+        }
+      : undefined,
   };
 }
 
