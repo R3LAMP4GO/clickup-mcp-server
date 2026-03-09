@@ -1,0 +1,36 @@
+{
+  "template_id": "daily-standup-digest",
+  "name": "Daily Standup Digest",
+  "description": "Posts a daily digest of tasks due today to Slack at 9 AM",
+  "category": "productivity",
+  "trigger_type": "cron",
+  "trigger_config": {
+    "cron_expression": "0 9 * * *"
+  },
+  "steps": [
+    {
+      "name": "fetch-tasks-due-today",
+      "type": "clickup_api",
+      "config": {
+        "method": "GET",
+        "path": "/list/{{list_id}}/task",
+        "params": {
+          "due_date_gt": "{{today_start}}",
+          "due_date_lt": "{{today_end}}"
+        }
+      }
+    },
+    {
+      "name": "post-to-slack",
+      "type": "slack",
+      "config": {
+        "channel": "{{slack_channel}}",
+        "message": "📋 *Daily Standup Digest*\n{{#each previous.tasks}}• {{name}} (due {{due_date}})\n{{/each}}"
+      }
+    }
+  ],
+  "params": [
+    { "name": "list_id", "type": "string", "description": "ClickUp List ID to fetch tasks from" },
+    { "name": "slack_channel", "type": "string", "description": "Slack channel to post digest to" }
+  ]
+}

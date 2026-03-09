@@ -1,0 +1,23 @@
+{
+  "template_id": "clickup-comment-to-slack",
+  "name": "ClickUp Comment to Slack",
+  "description": "Forwards new ClickUp task comments to a Slack channel via webhook",
+  "category": "integration",
+  "trigger_type": "webhook",
+  "trigger_config": {
+    "webhook_events": ["commentPosted"]
+  },
+  "steps": [
+    {
+      "name": "post-comment-to-slack",
+      "type": "slack",
+      "config": {
+        "channel": "{{slack_channel}}",
+        "message": "💬 *New comment on {{trigger.task_name}}*\nBy: {{trigger.user}}\n\n{{trigger.comment_text}}"
+      }
+    }
+  ],
+  "params": [
+    { "name": "slack_channel", "type": "string", "description": "Slack channel to forward comments to" }
+  ]
+}

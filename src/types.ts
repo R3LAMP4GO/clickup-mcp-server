@@ -812,3 +812,15 @@ export interface WorkflowRunStep {
   started_at: string;
   completed_at: string | null;
 }
+
+export interface TemplateParam {
+  name: string;
+  type: "string" | "number" | "boolean";
+  description: string;
+}
+
+export interface WorkflowTemplate extends Omit<Workflow, "id" | "enabled" | "created_at" | "updated_at"> {
+  template_id: string;
+  params: TemplateParam[];
+  category: string;
+}

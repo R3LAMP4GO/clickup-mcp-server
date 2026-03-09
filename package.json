@@ -7,7 +7,7 @@
     "clickup-server": "dist/index.js"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc -p tsconfig.build.json && cp -r src/templates dist/templates",
     "start": "node dist/index.js",
     "start:env": "cross-env NODE_ENV=production node dist/index.js",
     "dev": "ts-node-dev --quiet --no-notify --respawn --transpile-only src/index.ts",

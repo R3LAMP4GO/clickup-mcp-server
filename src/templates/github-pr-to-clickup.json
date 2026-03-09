@@ -1,0 +1,38 @@
+{
+  "template_id": "github-pr-to-clickup",
+  "name": "GitHub PR to ClickUp",
+  "description": "Updates ClickUp task status and adds a comment when a GitHub PR is opened or merged",
+  "category": "integration",
+  "trigger_type": "webhook",
+  "trigger_config": {
+    "webhook_events": ["pull_request"]
+  },
+  "steps": [
+    {
+      "name": "update-task-status",
+      "type": "clickup_api",
+      "config": {
+        "method": "PUT",
+        "path": "/task/{{task_id}}",
+        "body": {
+          "status": "{{target_status}}"
+        }
+      }
+    },
+    {
+      "name": "add-pr-comment",
+      "type": "clickup_api",
+      "config": {
+        "method": "POST",
+        "path": "/task/{{task_id}}/comment",
+        "body": {
+          "comment_text": "PR {{trigger.action}}: {{trigger.pull_request.title}}\n{{trigger.pull_request.html_url}}"
+        }
+      }
+    }
+  ],
+  "params": [
+    { "name": "task_id", "type": "string", "description": "ClickUp Task ID to update" },
+    { "name": "target_status", "type": "string", "description": "Status to set on the task when PR event fires" }
+  ]
+}

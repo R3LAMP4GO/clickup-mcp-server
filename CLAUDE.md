@@ -1,7 +1,7 @@
 # ClickUp MCP Server
 
 ## Current Phase
-Feature #7 Workflow Automation — Chunk 4/4 DONE (Automation MCP Tools)
+Feature #8 Workflow Templates — Chunk 3/3 DONE (Verification)
 
 ## Structure
 - `src/engine/workflow-store.ts` — SQLite WAL store: workflows, runs, run_steps
@@ -12,3 +12,6 @@ Feature #7 Workflow Automation — Chunk 4/4 DONE (Automation MCP Tools)
 - `src/config/app.config.ts` — engine config: ENGINE_DB_PATH, ENGINE_WEBHOOK_PORT, ENGINE_WEBHOOK_SECRET
 - `src/types.ts` — all workflow/step/run types appended at bottom
 - `src/tools/automation.tools.ts` — 9 MCP tools: CRUD, trigger, enable/disable, get runs
+- `src/templates/*.json` — 5 workflow templates (standup, overdue, comment→slack, PR→clickup, time report)
+- `src/types.ts` — WorkflowTemplate, TemplateParam types
+- `src/tools/template.tools.ts` — 2 MCP tools: list_workflow_templates, deploy_template

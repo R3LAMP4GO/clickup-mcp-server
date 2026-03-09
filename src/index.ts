@@ -190,6 +190,12 @@ import {
   emailSendEmailTool,
   handleSendEmail,
 } from "./tools/email.tools.js";
+import {
+  listWorkflowTemplatesTool,
+  deployTemplateTool,
+  handleListWorkflowTemplates,
+  handleDeployTemplate,
+} from "./tools/template.tools.js";
 import { startEngine } from "./engine/index.js";
 import {
   createWorkflowTool,
@@ -302,6 +308,8 @@ async function main() {
           enableWorkflowTool,
           disableWorkflowTool,
           getWorkflowRunsTool,
+          listWorkflowTemplatesTool,
+          deployTemplateTool,
         },
       },
     };
@@ -479,6 +487,12 @@ async function main() {
               return await handleDisableWorkflow(args);
             case getWorkflowRunsTool.name:
               return await handleGetWorkflowRuns(args);
+
+            // --- Template Cases ---
+            case listWorkflowTemplatesTool.name:
+              return await handleListWorkflowTemplates(args);
+            case deployTemplateTool.name:
+              return await handleDeployTemplate(args);
 
             default:
               throw new Error(`Unknown tool: ${request.params.name}`);
