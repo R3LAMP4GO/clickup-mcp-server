@@ -27,24 +27,23 @@ interface SmtpConfig {
   from: string;
 }
 
+interface EngineConfig {
+  dbPath: string;
+  webhookPort: number;
+  webhookSecret: string;
+}
+
 interface Config {
   server: ServerConfig;
-  // Remove clickUp property holding OAuth config
-  // clickUp: ClickUpConfig;
-  clickUpPersonalToken: string; // Add property for Personal API Token
-  clickUpApiUrl: string; // Keep API URL separate
-  encryptionKey: string; // Keep encryption key for potentially encrypting token at rest
+  clickUpPersonalToken: string;
+  clickUpApiUrl: string;
+  encryptionKey: string;
+  dataDir: string;
   slackBotToken?: string;
   discordWebhookUrl?: string;
   githubToken?: string;
   smtp?: SmtpConfig;
   engine?: EngineConfig;
-}
-
-interface EngineConfig {
-  dbPath: string;
-  webhookPort: number;
-  webhookSecret: string;
 }
 
 // Removed unused generateEncryptionKey - handled within validateConfig now if needed
@@ -81,6 +80,8 @@ function validateConfig(): Config {
   const encryptionKey =
     process.env.ENCRYPTION_KEY || crypto.randomBytes(32).toString("hex");
 
+  const dataDir = process.env.DATA_DIR || path.join(process.cwd(), "data");
+
   // Build optional SMTP config only if all SMTP vars are present
   const smtpHost = process.env.SMTP_HOST;
   const smtpPort = process.env.SMTP_PORT;
@@ -106,6 +107,7 @@ function validateConfig(): Config {
     clickUpPersonalToken,
     clickUpApiUrl: "https://api.clickup.com/api",
     encryptionKey,
+    dataDir,
     slackBotToken: process.env.SLACK_BOT_TOKEN,
     discordWebhookUrl: process.env.DISCORD_WEBHOOK_URL,
     githubToken: process.env.GITHUB_TOKEN,
