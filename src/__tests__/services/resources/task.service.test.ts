@@ -42,7 +42,7 @@ describe("TaskService", () => {
 
       // Assert
       expect(mockClient.post).toHaveBeenCalledWith(
-        `/list/${taskData.list_id}/task`,
+        `/v2/list/${taskData.list_id}/task`,
         taskData,
         {},
       );
@@ -83,7 +83,7 @@ describe("TaskService", () => {
 
       // Assert
       expect(mockClient.put).toHaveBeenCalledWith(
-        `/task/${taskId}`,
+        `/v2/task/${taskId}`,
         updates,
         {},
       );

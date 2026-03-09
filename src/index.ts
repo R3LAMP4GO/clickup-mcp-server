@@ -112,6 +112,64 @@ import {
   handleCreateList,
 } from "./tools/list.tools.js";
 import { createBoardTool, handleCreateBoard } from "./tools/board.tools.js";
+import {
+  getTaskCommentsTool,
+  createTaskCommentTool,
+  getListCommentsTool,
+  updateCommentTool,
+  deleteCommentTool,
+  handleGetTaskComments,
+  handleCreateTaskComment,
+  handleGetListComments,
+  handleUpdateComment,
+  handleDeleteComment,
+} from "./tools/comment.tools.js";
+import {
+  getSpaceTagsTool,
+  addTagToTaskTool,
+  removeTagFromTaskTool,
+  handleGetSpaceTags,
+  handleAddTagToTask,
+  handleRemoveTagFromTask,
+} from "./tools/tag.tools.js";
+import {
+  createTimeEntryTool,
+  getTimeEntriesTool,
+  deleteTimeEntryTool,
+  handleCreateTimeEntry,
+  handleGetTimeEntries,
+  handleDeleteTimeEntry,
+} from "./tools/time-tracking.tools.js";
+import {
+  addDependencyTool,
+  deleteDependencyTool,
+  handleAddDependency,
+  handleDeleteDependency,
+} from "./tools/dependency.tools.js";
+import {
+  addWatcherTool,
+  removeWatcherTool,
+  handleAddWatcher,
+  handleRemoveWatcher,
+} from "./tools/watcher.tools.js";
+import {
+  getGoalsTool,
+  createGoalTool,
+  updateGoalTool,
+  deleteGoalTool,
+  handleGetGoals,
+  handleCreateGoal,
+  handleUpdateGoal,
+  handleDeleteGoal,
+} from "./tools/goal.tools.js";
+import {
+  getWebhooksTool,
+  createWebhookTool,
+  deleteWebhookTool,
+  handleGetWebhooks,
+  handleCreateWebhook,
+  handleDeleteWebhook,
+} from "./tools/webhook.tools.js";
 
 // Tool Schemas - REMOVE taskSchema definition if only used in task.tools.ts
 const commonIdDescription =
@@ -165,6 +223,28 @@ async function main() {
           deleteViewTool,
           getViewTasksTool,
           createListTool,
+          getTaskCommentsTool,
+          createTaskCommentTool,
+          getListCommentsTool,
+          updateCommentTool,
+          deleteCommentTool,
+          getSpaceTagsTool,
+          addTagToTaskTool,
+          removeTagFromTaskTool,
+          createTimeEntryTool,
+          getTimeEntriesTool,
+          deleteTimeEntryTool,
+          addDependencyTool,
+          deleteDependencyTool,
+          addWatcherTool,
+          removeWatcherTool,
+          getGoalsTool,
+          createGoalTool,
+          updateGoalTool,
+          deleteGoalTool,
+          getWebhooksTool,
+          createWebhookTool,
+          deleteWebhookTool,
         },
       },
     };
@@ -264,6 +344,50 @@ async function main() {
               return await handleCreateBoard(clickUpService, args);
             case createListTool.name:
               return await handleCreateList(clickUpService, args);
+            case getTaskCommentsTool.name:
+              return await handleGetTaskComments(clickUpService, args);
+            case createTaskCommentTool.name:
+              return await handleCreateTaskComment(clickUpService, args);
+            case getListCommentsTool.name:
+              return await handleGetListComments(clickUpService, args);
+            case updateCommentTool.name:
+              return await handleUpdateComment(clickUpService, args);
+            case deleteCommentTool.name:
+              return await handleDeleteComment(clickUpService, args);
+            case getSpaceTagsTool.name:
+              return await handleGetSpaceTags(clickUpService, args);
+            case addTagToTaskTool.name:
+              return await handleAddTagToTask(clickUpService, args);
+            case removeTagFromTaskTool.name:
+              return await handleRemoveTagFromTask(clickUpService, args);
+            case createTimeEntryTool.name:
+              return await handleCreateTimeEntry(clickUpService, args);
+            case getTimeEntriesTool.name:
+              return await handleGetTimeEntries(clickUpService, args);
+            case deleteTimeEntryTool.name:
+              return await handleDeleteTimeEntry(clickUpService, args);
+            case addDependencyTool.name:
+              return await handleAddDependency(clickUpService, args);
+            case deleteDependencyTool.name:
+              return await handleDeleteDependency(clickUpService, args);
+            case addWatcherTool.name:
+              return await handleAddWatcher(clickUpService, args);
+            case removeWatcherTool.name:
+              return await handleRemoveWatcher(clickUpService, args);
+            case getGoalsTool.name:
+              return await handleGetGoals(clickUpService, args);
+            case createGoalTool.name:
+              return await handleCreateGoal(clickUpService, args);
+            case updateGoalTool.name:
+              return await handleUpdateGoal(clickUpService, args);
+            case deleteGoalTool.name:
+              return await handleDeleteGoal(clickUpService, args);
+            case getWebhooksTool.name:
+              return await handleGetWebhooks(clickUpService, args);
+            case createWebhookTool.name:
+              return await handleCreateWebhook(clickUpService, args);
+            case deleteWebhookTool.name:
+              return await handleDeleteWebhook(clickUpService, args);
 
             default:
               throw new Error(`Unknown tool: ${request.params.name}`);

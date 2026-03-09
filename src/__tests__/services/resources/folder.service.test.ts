@@ -58,7 +58,7 @@ describe("FolderService", () => {
       const result = await folderService.getFolders(params);
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        `/space/${params.space_id}/folder`,
+        `/v2/space/${params.space_id}/folder`,
         { params: { archived: "false" } },
       );
       expect(result).toEqual(mockResponse.data);
@@ -98,7 +98,7 @@ describe("FolderService", () => {
       const result = await folderService.createFolder(params);
 
       expect(mockClient.post).toHaveBeenCalledWith(
-        `/space/${space_id}/folder`,
+        `/v2/space/${space_id}/folder`,
         bodyParams,
       );
       expect(result).toEqual(mockResponse.data);
@@ -136,7 +136,7 @@ describe("FolderService", () => {
 
       const result = await folderService.getFolder(folderId);
 
-      expect(mockClient.get).toHaveBeenCalledWith(`/folder/${folderId}`);
+      expect(mockClient.get).toHaveBeenCalledWith(`/v2/folder/${folderId}`);
       expect(result).toEqual(mockResponse.data);
     });
 
@@ -174,7 +174,7 @@ describe("FolderService", () => {
       const result = await folderService.updateFolder(params);
 
       expect(mockClient.put).toHaveBeenCalledWith(
-        `/folder/${folder_id}`,
+        `/v2/folder/${folder_id}`,
         bodyParams,
       );
       expect(result).toEqual(mockResponse.data);
@@ -201,7 +201,7 @@ describe("FolderService", () => {
 
       const result = await folderService.deleteFolder(folderId);
 
-      expect(mockClient.delete).toHaveBeenCalledWith(`/folder/${folderId}`);
+      expect(mockClient.delete).toHaveBeenCalledWith(`/v2/folder/${folderId}`);
       expect(result).toEqual(mockResponse.data);
     });
 

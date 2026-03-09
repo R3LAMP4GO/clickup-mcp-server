@@ -600,3 +600,113 @@ export interface GetViewTasksParams {
   view_id: string;
   page?: number; // For pagination
 }
+
+// +++ Comment Types +++
+export interface ClickUpComment {
+  id: string;
+  comment_text: string;
+  user: {
+    id: number;
+    username: string;
+    email: string;
+    color: string;
+    profilePicture?: string;
+  };
+  resolved: boolean;
+  assignee?: {
+    id: number;
+    username: string;
+    email: string;
+    color: string;
+    profilePicture?: string;
+  };
+  assigned_by?: {
+    id: number;
+    username: string;
+    email: string;
+    color: string;
+    profilePicture?: string;
+  };
+  date: string;
+}
+
+export interface GetTaskCommentsParams {
+  task_id: string;
+  start?: number;
+  start_id?: string;
+}
+
+export interface CreateTaskCommentParams {
+  task_id: string;
+  comment_text: string;
+  assignee?: number;
+  notify_all?: boolean;
+}
+
+export interface GetListCommentsParams {
+  list_id: string;
+  start?: number;
+  start_id?: string;
+}
+
+export interface UpdateCommentParams {
+  comment_id: string;
+  comment_text: string;
+  assignee?: number;
+  resolved?: boolean;
+}
+
+export interface DeleteCommentParams {
+  comment_id: string;
+}
+
+// +++ Tag Types +++
+export interface ClickUpTag {
+  name: string;
+  tag_fg: string;
+  tag_bg: string;
+  creator?: number;
+}
+
+export interface GetSpaceTagsParams {
+  space_id: string;
+}
+
+export interface AddTagToTaskParams {
+  task_id: string;
+  tag_name: string;
+}
+
+export interface RemoveTagFromTaskParams {
+  task_id: string;
+  tag_name: string;
+}
+
+// +++ Time Tracking Types +++
+export interface CreateTimeEntryParams {
+  team_id: string;
+  task_id: string;
+  start: number;
+  duration: number;
+  description?: string;
+}
+
+export interface GetTimeEntriesParams {
+  team_id: string;
+  start_date?: number;
+  end_date?: number;
+  assignee?: number;
+}
+
+// +++ Dependency Types +++
+export interface AddDependencyParams {
+  task_id: string;
+  depends_on?: string;
+  dependency_of?: string;
+}
+
+export interface DeleteDependencyParams {
+  task_id: string;
+  depends_on?: string;
+  dependency_of?: string;
+}
