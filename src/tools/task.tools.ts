@@ -78,6 +78,10 @@ export const createTaskTool: Tool = {
       due_date: taskSchema.properties.due_date,
       time_estimate: taskSchema.properties.time_estimate,
       tags: taskSchema.properties.tags,
+      parent: {
+        type: "string",
+        description: "Parent task ID to create this task as a subtask.",
+      },
     },
     required: ["list_id", "name"],
   },
@@ -165,6 +169,7 @@ interface CreateTaskToolArgs {
   due_date?: number;
   time_estimate?: number;
   tags?: string[];
+  parent?: string;
   [key: string]: any;
 }
 
@@ -206,6 +211,7 @@ export async function handleCreateTask(
   if (toolArgs.time_estimate !== undefined)
     servicePayload.time_estimate = String(toolArgs.time_estimate);
   if (toolArgs.tags !== undefined) servicePayload.tags = toolArgs.tags;
+  if (toolArgs.parent !== undefined) servicePayload.parent = toolArgs.parent;
 
   try {
     const response = await clickUpService.taskService.createTask(servicePayload);

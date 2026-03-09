@@ -659,3 +659,25 @@ export interface UpdateCommentParams {
 export interface DeleteCommentParams {
   comment_id: string;
 }
+
+// +++ Tag Types +++
+export interface ClickUpTag {
+  name: string;
+  tag_fg: string;
+  tag_bg: string;
+  creator?: number;
+}
+
+export interface GetSpaceTagsParams {
+  space_id: string;
+}
+
+export interface AddTagToTaskParams {
+  task_id: string;
+  tag_name: string;
+}
+
+export interface RemoveTagFromTaskParams {
+  task_id: string;
+  tag_name: string;
+}

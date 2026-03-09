@@ -54,6 +54,7 @@ import { DocService } from "./resources/doc.service.js";
 import { ViewService } from "./resources/view.service.js";
 import { ListService } from "./resources/list.service.js";
 import { CommentService } from "./resources/comment.service.js";
+import { TagService } from "./resources/tag.service.js";
 
 // Remove TokenData interface if not used elsewhere (it was removed from types.ts)
 
@@ -72,6 +73,7 @@ export class ClickUpService {
   private _viewService: ViewService;
   private _listService: ListService;
   private _commentService: CommentService;
+  private _tagService: TagService;
 
   constructor() {
     // Remove tokenStore initialization
@@ -141,6 +143,7 @@ export class ClickUpService {
     this._viewService = new ViewService(this.client);
     this._listService = new ListService(this.client);
     this._commentService = new CommentService(this.client);
+    this._tagService = new TagService(this.client);
 
     logger.info("ClickUpService initialized with all resource services.");
   }
@@ -169,6 +172,9 @@ export class ClickUpService {
   }
   public get commentService(): CommentService {
     return this._commentService;
+  }
+  public get tagService(): TagService {
+    return this._tagService;
   }
 
   // Remove getToken method

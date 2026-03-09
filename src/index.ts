@@ -124,6 +124,14 @@ import {
   handleUpdateComment,
   handleDeleteComment,
 } from "./tools/comment.tools.js";
+import {
+  getSpaceTagsTool,
+  addTagToTaskTool,
+  removeTagFromTaskTool,
+  handleGetSpaceTags,
+  handleAddTagToTask,
+  handleRemoveTagFromTask,
+} from "./tools/tag.tools.js";
 
 // Tool Schemas - REMOVE taskSchema definition if only used in task.tools.ts
 const commonIdDescription =
@@ -182,6 +190,9 @@ async function main() {
           getListCommentsTool,
           updateCommentTool,
           deleteCommentTool,
+          getSpaceTagsTool,
+          addTagToTaskTool,
+          removeTagFromTaskTool,
         },
       },
     };
@@ -291,6 +302,12 @@ async function main() {
               return await handleUpdateComment(clickUpService, args);
             case deleteCommentTool.name:
               return await handleDeleteComment(clickUpService, args);
+            case getSpaceTagsTool.name:
+              return await handleGetSpaceTags(clickUpService, args);
+            case addTagToTaskTool.name:
+              return await handleAddTagToTask(clickUpService, args);
+            case removeTagFromTaskTool.name:
+              return await handleRemoveTagFromTask(clickUpService, args);
 
             default:
               throw new Error(`Unknown tool: ${request.params.name}`);
