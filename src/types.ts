@@ -753,3 +753,62 @@ export interface SendEmailParams {
   body: string;
   html?: string;
 }
+
+// --- Workflow Automation Types ---
+
+export type TriggerType = "cron" | "webhook" | "manual";
+export type RunStatus = "pending" | "running" | "completed" | "failed";
+export type StepType =
+  | "clickup_api"
+  | "slack"
+  | "discord"
+  | "github"
+  | "email"
+  | "condition";
+
+export interface WorkflowStepDef {
+  name: string;
+  type: StepType;
+  config: Record<string, unknown>;
+}
+
+export interface TriggerConfig {
+  cron_expression?: string;
+  webhook_events?: string[];
+  webhook_secret?: string;
+}
+
+export interface Workflow {
+  id: string;
+  name: string;
+  description: string;
+  trigger_type: TriggerType;
+  trigger_config: TriggerConfig;
+  steps: WorkflowStepDef[];
+  enabled: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface WorkflowRun {
+  id: string;
+  workflow_id: string;
+  status: RunStatus;
+  trigger_payload: Record<string, unknown>;
+  started_at: string;
+  completed_at: string | null;
+  error: string | null;
+}
+
+export interface WorkflowRunStep {
+  id: string;
+  run_id: string;
+  step_index: number;
+  step_name: string;
+  status: RunStatus;
+  input: Record<string, unknown>;
+  output: Record<string, unknown> | null;
+  error: string | null;
+  started_at: string;
+  completed_at: string | null;
+}

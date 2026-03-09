@@ -190,6 +190,27 @@ import {
   emailSendEmailTool,
   handleSendEmail,
 } from "./tools/email.tools.js";
+import { startEngine } from "./engine/index.js";
+import {
+  createWorkflowTool,
+  updateWorkflowTool,
+  listWorkflowsTool,
+  getWorkflowTool,
+  deleteWorkflowTool,
+  triggerWorkflowTool,
+  enableWorkflowTool,
+  disableWorkflowTool,
+  getWorkflowRunsTool,
+  handleCreateWorkflow,
+  handleUpdateWorkflow,
+  handleListWorkflows,
+  handleGetWorkflow,
+  handleDeleteWorkflow,
+  handleTriggerWorkflow,
+  handleEnableWorkflow,
+  handleDisableWorkflow,
+  handleGetWorkflowRuns,
+} from "./tools/automation.tools.js";
 
 // Tool Schemas - REMOVE taskSchema definition if only used in task.tools.ts
 const commonIdDescription =
@@ -209,6 +230,7 @@ async function main() {
   try {
     logger.info("Starting ClickUp MCP Server...");
     const clickUpService = new ClickUpService();
+    startEngine();
     const serverOptions = {
       capabilities: {
         tools: {
@@ -271,6 +293,15 @@ async function main() {
           githubCreateIssueTool,
           githubAddCommentTool,
           emailSendEmailTool,
+          createWorkflowTool,
+          updateWorkflowTool,
+          listWorkflowsTool,
+          getWorkflowTool,
+          deleteWorkflowTool,
+          triggerWorkflowTool,
+          enableWorkflowTool,
+          disableWorkflowTool,
+          getWorkflowRunsTool,
         },
       },
     };
@@ -428,6 +459,26 @@ async function main() {
               return await handleGitHubAddComment(args);
             case emailSendEmailTool.name:
               return await handleSendEmail(args);
+
+            // --- Automation Cases (standalone, use engine store/executor) ---
+            case createWorkflowTool.name:
+              return await handleCreateWorkflow(args);
+            case updateWorkflowTool.name:
+              return await handleUpdateWorkflow(args);
+            case listWorkflowsTool.name:
+              return await handleListWorkflows(args);
+            case getWorkflowTool.name:
+              return await handleGetWorkflow(args);
+            case deleteWorkflowTool.name:
+              return await handleDeleteWorkflow(args);
+            case triggerWorkflowTool.name:
+              return await handleTriggerWorkflow(args);
+            case enableWorkflowTool.name:
+              return await handleEnableWorkflow(args);
+            case disableWorkflowTool.name:
+              return await handleDisableWorkflow(args);
+            case getWorkflowRunsTool.name:
+              return await handleGetWorkflowRuns(args);
 
             default:
               throw new Error(`Unknown tool: ${request.params.name}`);
