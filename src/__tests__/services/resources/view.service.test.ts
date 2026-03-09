@@ -99,7 +99,7 @@ describe("ViewService", () => {
       const mockResponse = { data: { views: mockViewsData } };
       mockClient.get.mockResolvedValueOnce(mockResponse);
       await viewService.getViews(params);
-      expect(mockClient.get).toHaveBeenCalledWith("/space/space_456/view", {});
+      expect(mockClient.get).toHaveBeenCalledWith("/v2/space/space_456/view", {});
     });
 
     it("should retrieve views for a folder", async () => {
@@ -111,7 +111,7 @@ describe("ViewService", () => {
       mockClient.get.mockResolvedValueOnce(mockResponse);
       await viewService.getViews(params);
       expect(mockClient.get).toHaveBeenCalledWith(
-        "/folder/folder_789/view",
+        "/v2/folder/folder_789/view",
         {},
       );
     });
@@ -124,7 +124,7 @@ describe("ViewService", () => {
       const mockResponse = { data: { views: [] } }; // Assuming empty is fine
       mockClient.get.mockResolvedValueOnce(mockResponse);
       await viewService.getViews(params);
-      expect(mockClient.get).toHaveBeenCalledWith("/team/team_abc/view", {});
+      expect(mockClient.get).toHaveBeenCalledWith("/v2/team/team_abc/view", {});
     });
 
     it("should throw an error if API fails", async () => {
@@ -175,7 +175,7 @@ describe("ViewService", () => {
       const result = await viewService.createView(params);
 
       expect(mockClient.post).toHaveBeenCalledWith(
-        `/${parent_type}/${parent_id}/view`,
+        `/v2/${parent_type}/${parent_id}/view`,
         bodyParams,
       );
       expect(result).toEqual(mockResponseData);
@@ -206,7 +206,7 @@ describe("ViewService", () => {
 
       await viewService.createView(params);
       expect(mockClient.post).toHaveBeenCalledWith(
-        "/space/space_456/view",
+        "/v2/space/space_456/view",
         bodyParams,
       );
     });
@@ -244,7 +244,7 @@ describe("ViewService", () => {
 
       const result = await viewService.getViewDetails(viewId);
 
-      expect(mockClient.get).toHaveBeenCalledWith(`/view/${viewId}`);
+      expect(mockClient.get).toHaveBeenCalledWith(`/v2/view/${viewId}`);
       expect(result).toEqual(mockResponseData);
     });
 
@@ -283,7 +283,7 @@ describe("ViewService", () => {
       const result = await viewService.updateView(params);
 
       expect(mockClient.put).toHaveBeenCalledWith(
-        `/view/${view_id}`,
+        `/v2/view/${view_id}`,
         bodyParams,
       );
       expect(result).toEqual(mockResponseData);
@@ -310,7 +310,7 @@ describe("ViewService", () => {
 
       const result = await viewService.deleteView(viewId);
 
-      expect(mockClient.delete).toHaveBeenCalledWith(`/view/${viewId}`);
+      expect(mockClient.delete).toHaveBeenCalledWith(`/v2/view/${viewId}`);
       expect(result).toEqual(mockResponse.data);
     });
 
@@ -337,7 +337,7 @@ describe("ViewService", () => {
       const result = await viewService.getViewTasks(params);
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        `/view/${params.view_id}/task`,
+        `/v2/view/${params.view_id}/task`,
         { params: { page: params.page } },
       );
       expect(result).toEqual(mockTasksData);
@@ -351,7 +351,7 @@ describe("ViewService", () => {
 
       const result = await viewService.getViewTasks(params);
       expect(mockClient.get).toHaveBeenCalledWith(
-        `/view/${params.view_id}/task`,
+        `/v2/view/${params.view_id}/task`,
         { params: {} }, // page is undefined, so queryParams will be empty
       );
       expect(result.tasks).toEqual([]);

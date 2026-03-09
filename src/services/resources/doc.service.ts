@@ -186,11 +186,11 @@ export class DocService {
     const v3Url = `/v3/workspaces/${numericWorkspaceId}/docs/${doc_id}/pages`;
 
     try {
-      const response = await this.client.get<ClickUpDocPage[]>(
+      const response = await this.client.get<{ pages: ClickUpDocPage[] }>(
         v3Url,
         { params: {} },
       );
-      return response.data;
+      return response.data.pages;
     } catch (error) {
       const scope = `doc ${doc_id} (workspace: ${numericWorkspaceId})`;
       if (axios.isAxiosError(error)) {

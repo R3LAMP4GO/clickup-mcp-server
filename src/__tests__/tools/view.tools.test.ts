@@ -469,7 +469,7 @@ describe("View Tool Handlers", () => {
     it("updateViewTool should have correct structure", async () => {
       const { updateViewTool } = await import("../../tools/view.tools.js");
       expect(updateViewTool.name).toBe("clickup_update_view");
-      expect(updateViewTool.description).toBe("Updates an existing View.");
+      expect(updateViewTool.description).toBe("Updates an existing View. Note: ClickUp API v2 /view/{view_id} PUT endpoint currently has known issues (Internal Server Error).");
       // expect(updateViewTool.input_schema).toBeDefined(); // Commented out again
       // expect(updateViewTool.output_schema).toBeDefined();
     });
