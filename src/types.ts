@@ -108,10 +108,19 @@ export interface ServerConfig {
 // Update Config interface to remove OAuth part
 export interface Config {
   server: ServerConfig;
-  // clickUp: OAuthConfig; // Removed
   clickUpPersonalToken: string;
   clickUpApiUrl: string;
   encryptionKey: string;
+  slackBotToken?: string;
+  discordWebhookUrl?: string;
+  githubToken?: string;
+  smtp?: {
+    host: string;
+    port: number;
+    user: string;
+    pass: string;
+    from: string;
+  };
 }
 
 // MCP Tool Types
@@ -709,4 +718,38 @@ export interface DeleteDependencyParams {
   task_id: string;
   depends_on?: string;
   dependency_of?: string;
+}
+
+// +++ Integration Types +++
+export interface SlackMessageParams {
+  channel: string;
+  text: string;
+  blocks?: unknown[];
+}
+
+export interface DiscordWebhookParams {
+  content: string;
+  username?: string;
+  avatar_url?: string;
+}
+
+export interface GitHubIssueParams {
+  owner: string;
+  repo: string;
+  title: string;
+  body?: string;
+}
+
+export interface GitHubCommentParams {
+  owner: string;
+  repo: string;
+  issue_number: number;
+  body: string;
+}
+
+export interface SendEmailParams {
+  to: string;
+  subject: string;
+  body: string;
+  html?: string;
 }

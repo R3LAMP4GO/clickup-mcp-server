@@ -47,7 +47,7 @@ describe("DocService", () => {
       const result = await docService.searchDocs(params);
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        `/api/v3/workspaces/${params.team_id}/docs`,
+        `/v3/workspaces/${params.team_id}/docs`,
         { params: {} },
       );
       expect(result).toEqual(mockDocsData);
@@ -64,7 +64,7 @@ describe("DocService", () => {
       await docService.searchDocs(params);
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        `/api/v3/workspaces/${params.team_id}/docs`,
+        `/v3/workspaces/${params.team_id}/docs`,
         { params: { archived: true } },
       );
     });
@@ -93,7 +93,7 @@ describe("DocService", () => {
       const numericWorkspaceId = parseInt(params.workspace_id, 10);
 
       expect(mockClient.post).toHaveBeenCalledWith(
-        `/api/v3/workspaces/${numericWorkspaceId}/docs`,
+        `/v3/workspaces/${numericWorkspaceId}/docs`,
         { name: params.name },
         {},
       );
@@ -144,7 +144,7 @@ describe("DocService", () => {
       const result = await docService.getDocPages(params);
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        `/api/v3/workspaces/${numericWorkspaceId}/docs/${params.doc_id}/pages`,
+        `/v3/workspaces/${numericWorkspaceId}/docs/${params.doc_id}/pages`,
         { params: {} },
       );
       expect(result).toEqual(mockPageData);
@@ -203,7 +203,7 @@ describe("DocService", () => {
       const numericWorkspaceId = parseInt(params.workspace_id, 10);
 
       expect(mockClient.post).toHaveBeenCalledWith(
-        `/api/v3/workspaces/${numericWorkspaceId}/docs/${params.doc_id}/pages`,
+        `/v3/workspaces/${numericWorkspaceId}/docs/${params.doc_id}/pages`,
         { name: params.name, content: params.content },
         {},
       );
@@ -264,7 +264,7 @@ describe("DocService", () => {
       const numericWorkspaceId = parseInt(params.workspace_id, 10);
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        `/api/v3/workspaces/${numericWorkspaceId}/docs/${params.doc_id}/pages/${params.page_id}`,
+        `/v3/workspaces/${numericWorkspaceId}/docs/${params.doc_id}/pages/${params.page_id}`,
         { params: {} },
       );
       expect(result).toEqual("# Content");
@@ -308,7 +308,7 @@ describe("DocService", () => {
       const result = await docService.getDocPageContent(params);
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        `/api/v3/workspaces/${numericWorkspaceId}/docs/${params.doc_id}/pages/${params.page_id}`,
+        `/v3/workspaces/${numericWorkspaceId}/docs/${params.doc_id}/pages/${params.page_id}`,
         { params: {} },
       );
       expect(result).toEqual("");
@@ -352,7 +352,7 @@ describe("DocService", () => {
       const result = await docService.editDocPageContent(params);
 
       expect(mockClient.put).toHaveBeenCalledWith(
-        `/api/v3/workspaces/${numericWorkspaceId}/docs/${params.doc_id}/pages/${params.page_id}`,
+        `/v3/workspaces/${numericWorkspaceId}/docs/${params.doc_id}/pages/${params.page_id}`,
         { content: params.content, name: params.title },
         {},
       );

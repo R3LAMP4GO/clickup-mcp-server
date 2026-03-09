@@ -55,15 +55,19 @@
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.1",
+    "@octokit/rest": "^22.0.1",
+    "@slack/web-api": "^7.14.1",
     "axios": "^1.11.0",
     "cross-env": "^10.0.0",
     "dotenv": "^17.2.1",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "nodemailer": "^8.0.2"
   },
   "devDependencies": {
     "@types/express": "^5.0.3",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.1.0",
+    "@types/nodemailer": "^7.0.11",
     "@types/supertest": "^6.0.3",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
