@@ -1,7 +1,7 @@
 # ClickUp MCP Server
 
 ## Current Phase
-Feature #8 Workflow Templates — Chunk 2/3 DONE (Template MCP tools + wiring)
+Feature #8 Workflow Templates — Chunk 3/3 DONE (Verification)
 
 ## Structure
 - `src/engine/workflow-store.ts` — SQLite WAL store: workflows, runs, run_steps
