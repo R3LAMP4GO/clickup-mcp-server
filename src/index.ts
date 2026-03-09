@@ -180,6 +180,16 @@ import {
   discordSendWebhookMessageTool,
   handleDiscordSendWebhookMessage,
 } from "./tools/discord.tools.js";
+import {
+  githubCreateIssueTool,
+  githubAddCommentTool,
+  handleGitHubCreateIssue,
+  handleGitHubAddComment,
+} from "./tools/github.tools.js";
+import {
+  emailSendEmailTool,
+  handleSendEmail,
+} from "./tools/email.tools.js";
 
 // Tool Schemas - REMOVE taskSchema definition if only used in task.tools.ts
 const commonIdDescription =
@@ -258,6 +268,9 @@ async function main() {
           slackSendMessageTool,
           slackPostToChannelTool,
           discordSendWebhookMessageTool,
+          githubCreateIssueTool,
+          githubAddCommentTool,
+          emailSendEmailTool,
         },
       },
     };
@@ -409,6 +422,12 @@ async function main() {
               return await handleSlackPostToChannel(args);
             case discordSendWebhookMessageTool.name:
               return await handleDiscordSendWebhookMessage(args);
+            case githubCreateIssueTool.name:
+              return await handleGitHubCreateIssue(args);
+            case githubAddCommentTool.name:
+              return await handleGitHubAddComment(args);
+            case emailSendEmailTool.name:
+              return await handleSendEmail(args);
 
             default:
               throw new Error(`Unknown tool: ${request.params.name}`);
