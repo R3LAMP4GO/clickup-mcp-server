@@ -55,6 +55,9 @@ import { ViewService } from "./resources/view.service.js";
 import { ListService } from "./resources/list.service.js";
 import { CommentService } from "./resources/comment.service.js";
 import { TagService } from "./resources/tag.service.js";
+import { TimeTrackingService } from "./resources/time-tracking.service.js";
+import { DependencyService } from "./resources/dependency.service.js";
+import { WatcherService } from "./resources/watcher.service.js";
 
 // Remove TokenData interface if not used elsewhere (it was removed from types.ts)
 
@@ -74,6 +77,9 @@ export class ClickUpService {
   private _listService: ListService;
   private _commentService: CommentService;
   private _tagService: TagService;
+  private _timeTrackingService: TimeTrackingService;
+  private _dependencyService: DependencyService;
+  private _watcherService: WatcherService;
 
   constructor() {
     // Remove tokenStore initialization
@@ -144,6 +150,9 @@ export class ClickUpService {
     this._listService = new ListService(this.client);
     this._commentService = new CommentService(this.client);
     this._tagService = new TagService(this.client);
+    this._timeTrackingService = new TimeTrackingService(this.client);
+    this._dependencyService = new DependencyService(this.client);
+    this._watcherService = new WatcherService(this.client);
 
     logger.info("ClickUpService initialized with all resource services.");
   }
@@ -175,6 +184,15 @@ export class ClickUpService {
   }
   public get tagService(): TagService {
     return this._tagService;
+  }
+  public get timeTrackingService(): TimeTrackingService {
+    return this._timeTrackingService;
+  }
+  public get dependencyService(): DependencyService {
+    return this._dependencyService;
+  }
+  public get watcherService(): WatcherService {
+    return this._watcherService;
   }
 
   // Remove getToken method

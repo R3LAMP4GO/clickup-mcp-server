@@ -132,6 +132,26 @@ import {
   handleAddTagToTask,
   handleRemoveTagFromTask,
 } from "./tools/tag.tools.js";
+import {
+  createTimeEntryTool,
+  getTimeEntriesTool,
+  deleteTimeEntryTool,
+  handleCreateTimeEntry,
+  handleGetTimeEntries,
+  handleDeleteTimeEntry,
+} from "./tools/time-tracking.tools.js";
+import {
+  addDependencyTool,
+  deleteDependencyTool,
+  handleAddDependency,
+  handleDeleteDependency,
+} from "./tools/dependency.tools.js";
+import {
+  addWatcherTool,
+  removeWatcherTool,
+  handleAddWatcher,
+  handleRemoveWatcher,
+} from "./tools/watcher.tools.js";
 
 // Tool Schemas - REMOVE taskSchema definition if only used in task.tools.ts
 const commonIdDescription =
@@ -193,6 +213,13 @@ async function main() {
           getSpaceTagsTool,
           addTagToTaskTool,
           removeTagFromTaskTool,
+          createTimeEntryTool,
+          getTimeEntriesTool,
+          deleteTimeEntryTool,
+          addDependencyTool,
+          deleteDependencyTool,
+          addWatcherTool,
+          removeWatcherTool,
         },
       },
     };
@@ -308,6 +335,20 @@ async function main() {
               return await handleAddTagToTask(clickUpService, args);
             case removeTagFromTaskTool.name:
               return await handleRemoveTagFromTask(clickUpService, args);
+            case createTimeEntryTool.name:
+              return await handleCreateTimeEntry(clickUpService, args);
+            case getTimeEntriesTool.name:
+              return await handleGetTimeEntries(clickUpService, args);
+            case deleteTimeEntryTool.name:
+              return await handleDeleteTimeEntry(clickUpService, args);
+            case addDependencyTool.name:
+              return await handleAddDependency(clickUpService, args);
+            case deleteDependencyTool.name:
+              return await handleDeleteDependency(clickUpService, args);
+            case addWatcherTool.name:
+              return await handleAddWatcher(clickUpService, args);
+            case removeWatcherTool.name:
+              return await handleRemoveWatcher(clickUpService, args);
 
             default:
               throw new Error(`Unknown tool: ${request.params.name}`);

@@ -681,3 +681,32 @@ export interface RemoveTagFromTaskParams {
   task_id: string;
   tag_name: string;
 }
+
+// +++ Time Tracking Types +++
+export interface CreateTimeEntryParams {
+  team_id: string;
+  task_id: string;
+  start: number;
+  duration: number;
+  description?: string;
+}
+
+export interface GetTimeEntriesParams {
+  team_id: string;
+  start_date?: number;
+  end_date?: number;
+  assignee?: number;
+}
+
+// +++ Dependency Types +++
+export interface AddDependencyParams {
+  task_id: string;
+  depends_on?: string;
+  dependency_of?: string;
+}
+
+export interface DeleteDependencyParams {
+  task_id: string;
+  depends_on?: string;
+  dependency_of?: string;
+}
