@@ -170,6 +170,16 @@ import {
   handleCreateWebhook,
   handleDeleteWebhook,
 } from "./tools/webhook.tools.js";
+import {
+  slackSendMessageTool,
+  slackPostToChannelTool,
+  handleSlackSendMessage,
+  handleSlackPostToChannel,
+} from "./tools/slack.tools.js";
+import {
+  discordSendWebhookMessageTool,
+  handleDiscordSendWebhookMessage,
+} from "./tools/discord.tools.js";
 
 // Tool Schemas - REMOVE taskSchema definition if only used in task.tools.ts
 const commonIdDescription =
@@ -245,6 +255,9 @@ async function main() {
           getWebhooksTool,
           createWebhookTool,
           deleteWebhookTool,
+          slackSendMessageTool,
+          slackPostToChannelTool,
+          discordSendWebhookMessageTool,
         },
       },
     };
@@ -388,6 +401,14 @@ async function main() {
               return await handleCreateWebhook(clickUpService, args);
             case deleteWebhookTool.name:
               return await handleDeleteWebhook(clickUpService, args);
+
+            // --- Integration Cases (standalone, no clickUpService) ---
+            case slackSendMessageTool.name:
+              return await handleSlackSendMessage(args);
+            case slackPostToChannelTool.name:
+              return await handleSlackPostToChannel(args);
+            case discordSendWebhookMessageTool.name:
+              return await handleDiscordSendWebhookMessage(args);
 
             default:
               throw new Error(`Unknown tool: ${request.params.name}`);
