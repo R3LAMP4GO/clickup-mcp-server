@@ -1,7 +1,7 @@
 # ClickUp MCP Server
 
 ## Current Phase
-Feature #7 Workflow Automation — Chunk 3/4 DONE (Webhook Listener + Engine Bootstrap)
+Feature #7 Workflow Automation — Chunk 4/4 DONE (Automation MCP Tools)
 
 ## Structure
 - `src/engine/workflow-store.ts` — SQLite WAL store: workflows, runs, run_steps
@@ -11,3 +11,4 @@ Feature #7 Workflow Automation — Chunk 3/4 DONE (Webhook Listener + Engine Boo
 - `src/engine/index.ts` — barrel export + startEngine()/stopEngine() bootstrap
 - `src/config/app.config.ts` — engine config: ENGINE_DB_PATH, ENGINE_WEBHOOK_PORT, ENGINE_WEBHOOK_SECRET
 - `src/types.ts` — all workflow/step/run types appended at bottom
+- `src/tools/automation.tools.ts` — 9 MCP tools: CRUD, trigger, enable/disable, get runs
