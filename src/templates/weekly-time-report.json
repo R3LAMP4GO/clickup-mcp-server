@@ -1,0 +1,37 @@
+{
+  "template_id": "weekly-time-report",
+  "name": "Weekly Time Report",
+  "description": "Aggregates time tracking data every Friday at 5 PM and sends a summary via email",
+  "category": "reporting",
+  "trigger_type": "cron",
+  "trigger_config": {
+    "cron_expression": "0 17 * * 5"
+  },
+  "steps": [
+    {
+      "name": "fetch-time-entries",
+      "type": "clickup_api",
+      "config": {
+        "method": "GET",
+        "path": "/team/{{team_id}}/time_entries",
+        "params": {
+          "start_date": "{{week_start}}",
+          "end_date": "{{week_end}}"
+        }
+      }
+    },
+    {
+      "name": "send-report-email",
+      "type": "email",
+      "config": {
+        "to": "{{email_to}}",
+        "subject": "Weekly Time Report — {{week_start}} to {{week_end}}",
+        "body": "Time tracking summary:\n{{#each previous.entries}}• {{task_name}}: {{duration}}h\n{{/each}}\nTotal: {{previous.total}}h"
+      }
+    }
+  ],
+  "params": [
+    { "name": "team_id", "type": "string", "description": "ClickUp Team ID for time entries" },
+    { "name": "email_to", "type": "string", "description": "Email address to send the report to" }
+  ]
+}

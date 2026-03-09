@@ -1,0 +1,37 @@
+{
+  "template_id": "task-overdue-alert",
+  "name": "Task Overdue Alert",
+  "description": "Checks hourly for overdue tasks and sends alerts to a notification channel",
+  "category": "monitoring",
+  "trigger_type": "cron",
+  "trigger_config": {
+    "cron_expression": "0 * * * *"
+  },
+  "steps": [
+    {
+      "name": "find-overdue-tasks",
+      "type": "clickup_api",
+      "config": {
+        "method": "GET",
+        "path": "/list/{{list_id}}/task",
+        "params": {
+          "due_date_lt": "{{now}}",
+          "statuses": ["open", "in progress"]
+        }
+      }
+    },
+    {
+      "name": "send-alert",
+      "type": "{{notification_type}}",
+      "config": {
+        "channel": "{{notification_channel}}",
+        "message": "🚨 *Overdue Tasks Alert*\n{{#each previous.tasks}}• {{name}} — due {{due_date}}\n{{/each}}"
+      }
+    }
+  ],
+  "params": [
+    { "name": "list_id", "type": "string", "description": "ClickUp List ID to monitor" },
+    { "name": "notification_type", "type": "string", "description": "Notification service: slack or discord" },
+    { "name": "notification_channel", "type": "string", "description": "Channel or webhook URL for alerts" }
+  ]
+}
