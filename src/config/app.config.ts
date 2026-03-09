@@ -19,6 +19,14 @@ interface ServerConfig {
 //   authUrl: string;
 // }
 
+interface SmtpConfig {
+  host: string;
+  port: number;
+  user: string;
+  pass: string;
+  from: string;
+}
+
 interface Config {
   server: ServerConfig;
   // Remove clickUp property holding OAuth config
@@ -26,6 +34,10 @@ interface Config {
   clickUpPersonalToken: string; // Add property for Personal API Token
   clickUpApiUrl: string; // Keep API URL separate
   encryptionKey: string; // Keep encryption key for potentially encrypting token at rest
+  slackBotToken?: string;
+  discordWebhookUrl?: string;
+  githubToken?: string;
+  smtp?: SmtpConfig;
 }
 
 // Removed unused generateEncryptionKey - handled within validateConfig now if needed
@@ -62,22 +74,35 @@ function validateConfig(): Config {
   const encryptionKey =
     process.env.ENCRYPTION_KEY || crypto.randomBytes(32).toString("hex");
 
+  // Build optional SMTP config only if all SMTP vars are present
+  const smtpHost = process.env.SMTP_HOST;
+  const smtpPort = process.env.SMTP_PORT;
+  const smtpUser = process.env.SMTP_USER;
+  const smtpPass = process.env.SMTP_PASS;
+  const smtpFrom = process.env.SMTP_FROM;
+  const smtp =
+    smtpHost && smtpPort && smtpUser && smtpPass && smtpFrom
+      ? {
+          host: smtpHost,
+          port: parseInt(smtpPort),
+          user: smtpUser,
+          pass: smtpPass,
+          from: smtpFrom,
+        }
+      : undefined;
+
   return {
     server: {
       port,
       logLevel,
     },
-    // Remove clickUp object
-    // clickUp: {
-    //   clientId: process.env.CLICKUP_CLIENT_ID!,
-    //   clientSecret: process.env.CLICKUP_CLIENT_SECRET!,
-    //   redirectUri,
-    //   apiUrl: "https://api.clickup.com/api/v2",
-    //   authUrl: "https://app.clickup.com/api",
-    // },
-    clickUpPersonalToken, // Add token directly
-    clickUpApiUrl: "https://api.clickup.com/api", // Base URL with /api path
-    encryptionKey, // Keep encryption key
+    clickUpPersonalToken,
+    clickUpApiUrl: "https://api.clickup.com/api",
+    encryptionKey,
+    slackBotToken: process.env.SLACK_BOT_TOKEN,
+    discordWebhookUrl: process.env.DISCORD_WEBHOOK_URL,
+    githubToken: process.env.GITHUB_TOKEN,
+    smtp,
   };
 }
 
