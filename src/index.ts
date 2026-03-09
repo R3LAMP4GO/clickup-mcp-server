@@ -152,6 +152,24 @@ import {
   handleAddWatcher,
   handleRemoveWatcher,
 } from "./tools/watcher.tools.js";
+import {
+  getGoalsTool,
+  createGoalTool,
+  updateGoalTool,
+  deleteGoalTool,
+  handleGetGoals,
+  handleCreateGoal,
+  handleUpdateGoal,
+  handleDeleteGoal,
+} from "./tools/goal.tools.js";
+import {
+  getWebhooksTool,
+  createWebhookTool,
+  deleteWebhookTool,
+  handleGetWebhooks,
+  handleCreateWebhook,
+  handleDeleteWebhook,
+} from "./tools/webhook.tools.js";
 
 // Tool Schemas - REMOVE taskSchema definition if only used in task.tools.ts
 const commonIdDescription =
@@ -220,6 +238,13 @@ async function main() {
           deleteDependencyTool,
           addWatcherTool,
           removeWatcherTool,
+          getGoalsTool,
+          createGoalTool,
+          updateGoalTool,
+          deleteGoalTool,
+          getWebhooksTool,
+          createWebhookTool,
+          deleteWebhookTool,
         },
       },
     };
@@ -349,6 +374,20 @@ async function main() {
               return await handleAddWatcher(clickUpService, args);
             case removeWatcherTool.name:
               return await handleRemoveWatcher(clickUpService, args);
+            case getGoalsTool.name:
+              return await handleGetGoals(clickUpService, args);
+            case createGoalTool.name:
+              return await handleCreateGoal(clickUpService, args);
+            case updateGoalTool.name:
+              return await handleUpdateGoal(clickUpService, args);
+            case deleteGoalTool.name:
+              return await handleDeleteGoal(clickUpService, args);
+            case getWebhooksTool.name:
+              return await handleGetWebhooks(clickUpService, args);
+            case createWebhookTool.name:
+              return await handleCreateWebhook(clickUpService, args);
+            case deleteWebhookTool.name:
+              return await handleDeleteWebhook(clickUpService, args);
 
             default:
               throw new Error(`Unknown tool: ${request.params.name}`);
