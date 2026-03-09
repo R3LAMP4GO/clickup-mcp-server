@@ -51,7 +51,7 @@ describe("SpaceService", () => {
       const result = await spaceService.getSpaces(params);
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        `/team/${params.team_id}/space`,
+        `/v2/team/${params.team_id}/space`,
         { params: { archived: "false" } },
       );
       expect(result).toEqual(mockResponse.data); // Service returns { spaces: [...] }
@@ -65,7 +65,7 @@ describe("SpaceService", () => {
       await spaceService.getSpaces(params);
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        `/team/${params.team_id}/space`,
+        `/v2/team/${params.team_id}/space`,
         { params: { archived: "true" } },
       );
     });
@@ -101,7 +101,7 @@ describe("SpaceService", () => {
       const result = await spaceService.createSpace(params);
 
       expect(mockClient.post).toHaveBeenCalledWith(
-        `/team/${team_id}/space`,
+        `/v2/team/${team_id}/space`,
         bodyParams,
       );
       expect(result).toEqual(mockResponse.data);
@@ -135,7 +135,7 @@ describe("SpaceService", () => {
 
       const result = await spaceService.getSpace(spaceId);
 
-      expect(mockClient.get).toHaveBeenCalledWith(`/space/${spaceId}`);
+      expect(mockClient.get).toHaveBeenCalledWith(`/v2/space/${spaceId}`);
       expect(result).toEqual(mockResponse.data);
     });
 
@@ -170,7 +170,7 @@ describe("SpaceService", () => {
       const result = await spaceService.updateSpace(params);
 
       expect(mockClient.put).toHaveBeenCalledWith(
-        `/space/${space_id}`,
+        `/v2/space/${space_id}`,
         bodyParams,
       );
       expect(result).toEqual(mockResponse.data);
@@ -197,7 +197,7 @@ describe("SpaceService", () => {
 
       const result = await spaceService.deleteSpace(spaceId);
 
-      expect(mockClient.delete).toHaveBeenCalledWith(`/space/${spaceId}`);
+      expect(mockClient.delete).toHaveBeenCalledWith(`/v2/space/${spaceId}`);
       expect(result).toEqual(mockResponse.data);
     });
 

@@ -58,7 +58,7 @@ describe("CustomFieldService", () => {
 
       const result = await customFieldService.getCustomFields(listId);
 
-      expect(mockClient.get).toHaveBeenCalledWith(`/list/${listId}/field`, {});
+      expect(mockClient.get).toHaveBeenCalledWith(`/v2/list/${listId}/field`, {});
       expect(result).toEqual(mockCustomFieldsData);
     });
 
@@ -87,7 +87,7 @@ describe("CustomFieldService", () => {
 
       const expectedBody = { value: params.value };
       expect(mockClient.post).toHaveBeenCalledWith(
-        `/task/${params.task_id}/field/${params.field_id}`,
+        `/v2/task/${params.task_id}/field/${params.field_id}`,
         expectedBody,
         {},
       );
@@ -112,7 +112,7 @@ describe("CustomFieldService", () => {
         value_options: params.value_options,
       };
       expect(mockClient.post).toHaveBeenCalledWith(
-        `/task/${params.task_id}/field/${params.field_id}`,
+        `/v2/task/${params.task_id}/field/${params.field_id}`,
         expectedBody,
         {},
       );
@@ -148,7 +148,7 @@ describe("CustomFieldService", () => {
         await customFieldService.removeTaskCustomFieldValue(params);
 
       expect(mockClient.delete).toHaveBeenCalledWith(
-        `/task/${params.task_id}/field/${params.field_id}`,
+        `/v2/task/${params.task_id}/field/${params.field_id}`,
         {},
       );
       expect(result).toEqual(mockResponseData);

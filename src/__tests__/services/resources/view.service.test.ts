@@ -73,7 +73,7 @@ describe("ViewService", () => {
       const result = await viewService.getViews(params);
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        `/${params.parent_type}/${params.parent_id}/view`,
+        `/v2/${params.parent_type}/${params.parent_id}/view`,
         {},
       );
       expect(result).toEqual(mockViewsData);
